@@ -1,15 +1,14 @@
 <template>
-  <header>
-    <Navbar />
-  </header>
-  <main>
-    <router-view />
-  </main>
-  <footer>
-    <div class="bg-dark text-light text-center p-4">
-      Made with 💖 by CodeWorks
+  <header></header>
+  <main class="d-flex background">
+    <div class="col-md-11">
+      <router-view />
     </div>
-  </footer>
+    <div class="col-md-1">
+      <Navigation />
+    </div>
+  </main>
+  <footer></footer>
 </template>
 
 <script>
@@ -26,5 +25,11 @@ export default {
 </script>
 <style lang="scss">
 @import "./assets/scss/main.scss";
-
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+.background {
+  background-color: #2a2d3a;
+}
+p {
+  font-family: "Nunito", sans-serif;
+}
 </style>
