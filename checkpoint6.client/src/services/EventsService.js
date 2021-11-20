@@ -19,9 +19,12 @@ async getActive(id){
   active = res.data
   AppState.activeEvent = active
 }
-getCreatedEvents(user){
-  let myevents = AppState.towerEvents.filter(e => e.creatorId === user.id)
-  AppState.towerEvents = myevents
+async getCreatedEvents(userId){
+  const res = await api.get('api/events/')
+  let allevents = res.data
+  let newarray = allevents.filter( e => e.creatorId === userId)
+  logger.log('TESTING', newarray)
+  AppState.towerEvents = newarray
 }
 }
 export const eventsService = new EventsService()

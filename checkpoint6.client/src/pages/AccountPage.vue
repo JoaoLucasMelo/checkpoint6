@@ -10,11 +10,11 @@
     <div class="row justify-content-center">
       <div class="col-md-11">
         <div>
-          <p class="fontcolor m-0">My Created Events</p>
+          <p class="green f-16 m-0">My Created Events</p>
         </div>
         <div class="d-flex flex-wrap">
-          <div class="col-md-3" v-for="e in attending" :key="e.id">
-            <Event :towerEvents="e.event" />
+          <div class="col-md-3" v-for="e in towerEvents" :key="e.id">
+            <Event :towerEvents="e" />
           </div>
         </div>
       </div>
@@ -22,11 +22,18 @@
     <div class="row justify-content-center">
       <div class="col-md-11">
         <div>
-          <p class="fontcolor m-0">My Events</p>
+          <p class="green f-16 mt-3 m-0">Events I am Attending</p>
         </div>
         <div class="d-flex flex-wrap">
-          <div class="col-md-3" v-for="e in attending" :key="e.id">
-            <Event :towerEvents="e.event" />
+          <div class="col-12" v-if="attending.length > 0">
+            <div class="" v-for="e in attending" :key="e.id">
+              <Event :towerEvents="e.event" />
+            </div>
+          </div>
+          <div v-else>
+            <p class="fst-italic my-5 fontcolor">
+              "Currently not attending to any events"
+            </p>
           </div>
         </div>
       </div>
@@ -41,6 +48,7 @@ import { logger } from "../utils/Logger"
 import Pop from "../utils/Pop"
 import { attendeesService } from "../services/AttendeesService"
 import { eventsService } from "../services/EventsService"
+import { AuthService } from "../services/AuthService"
 export default {
   name: 'Account',
   setup() {
@@ -54,7 +62,7 @@ export default {
     })
     onMounted(async () => {
       try {
-        await eventsService.getCreatedEvents(account)
+        await eventsService.getCreatedEvents(AuthService.userInfo.id)
       } catch (error) {
         logger.error
         Pop.toast(error.message, 'error')
@@ -62,7 +70,8 @@ export default {
     })
     return {
       account: computed(() => AppState.account),
-      attending: computed(() => AppState.attending)
+      attending: computed(() => AppState.attending),
+      towerEvents: computed(() => AppState.towerEvents)
     }
   }
 }
@@ -71,6 +80,9 @@ export default {
 <style scoped>
 .fontcolor {
   color: #a0a2ad;
+}
+.green {
+  color: #72d8a2;
 }
 .scrollbar {
   overflow-y: scroll;
@@ -86,5 +98,8 @@ export default {
 .scrollbar::-webkit-scrollbar-thumb {
   background-color: #adadad;
   border-radius: 10px;
+}
+.widmax {
+  width: 100vh;
 }
 </style>
