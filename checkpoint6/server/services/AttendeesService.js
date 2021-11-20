@@ -1,5 +1,6 @@
 import { dbContext } from '../db/DbContext'
 import { Forbidden } from '../utils/Errors'
+import { commentsService } from './CommentsService'
 import { towerEventsService } from './TowerEventsService'
 
 class AttendeesService {
@@ -18,6 +19,7 @@ class AttendeesService {
     await attendee.populate('account')
     await attendee.populate('event')
     await towerEventsService.capacity(data.eventId)
+    await commentsService.isAttending(data.eventId, true)
     return attendee
   }
 

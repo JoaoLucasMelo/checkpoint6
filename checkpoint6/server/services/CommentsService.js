@@ -21,5 +21,10 @@ class CommentsService {
     }
     await dbContext.Comment.findByIdAndDelete(id)
   }
+
+  async isAttending(eventId, bool) {
+    const update = { isAttending: bool }
+    await dbContext.Comment.findOneAndUpdate({ eventId: eventId }, update)
+  }
 }
 export const commentsService = new CommentsService()
