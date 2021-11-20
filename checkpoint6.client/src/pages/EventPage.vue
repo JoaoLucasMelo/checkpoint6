@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid scrollbar">
+  <div class="container-fluid homeheight scrollbar">
     <div class="row">
       <div class="col-12">
         <router-link :to="{ name: 'Home' }">
@@ -13,7 +13,13 @@
           <div
             class="col-md-4 justify-content-center d-flex align-items-center"
           >
-            <img height="350" width="370" :src="activeEvent.coverImg" alt="" />
+            <img
+              class="m-3 my-4"
+              height="350"
+              width="370"
+              :src="activeEvent.coverImg"
+              alt=""
+            />
           </div>
           <div class="col-md-8 p-2">
             <div class="text-end">butao</div>
@@ -40,7 +46,48 @@
       </div>
       <div class="col-md-11">
         <p class="m-0 p-1 fontcolor">See who is attending</p>
-        <div class="card profiles"></div>
+        <div class="card profiles p-1">
+          <div v-for="p in activeAttending" :key="p.id">
+            <img
+              class="rounded rounded-pill"
+              :src="p.account.picture"
+              height="40"
+              alt=""
+              :title="p.account.name"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center mt-5">
+        <div class="col-8">
+          <div class="card">
+            <div class="d-flex justify-content-end mt-2">
+              <p>Join the conversation</p>
+            </div>
+            <form @submit.prevent="create">
+              <div class="d-flex justify-content-center mt-2">
+                <textarea
+                  class="inputwid form-control"
+                  placeholder="Tell the people..."
+                  type="text"
+                  name=""
+                  id=""
+                  v-model="newpost.body"
+                ></textarea>
+              </div>
+              <div class="d-flex justify-content-end mt-2 margin">
+                <button type="submit" class="btn btn-primary">
+                  Post comment
+                </button>
+              </div>
+            </form>
+            <div>
+              <div v-for="c in comments" :key="c.id">
+                <Comment :comments="c" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -48,14 +95,17 @@
 
 
 <script>
-import { computed, onMounted, watchEffect } from "@vue/runtime-core"
+import { computed, onMounted, ref, watchEffect } from "@vue/runtime-core"
 import { logger } from "../utils/Logger"
 import Pop from "../utils/Pop"
 import { eventsService } from "../services/EventsService"
+import { attendeesService } from "../services/AttendeesService"
+import { commentsService } from "../services/CommentsService"
 import { useRoute } from "vue-router"
 import { AppState } from "../AppState"
 export default {
   setup() {
+    const newpost = ref({})
     const route = useRoute()
     onMounted(async () => {
       try {
@@ -65,9 +115,38 @@ export default {
         Pop.toast(error.message, 'error')
       }
     })
+    onMounted(async () => {
+      try {
+        await attendeesService.getActiveAttendees(route.params.id)
+      } catch (error) {
+        logger.error(error)
+        Pop.toast(error.message, 'error')
+      }
+    })
+    onMounted(async () => {
+      try {
+        await commentsService.getComments(route.params.id)
+      } catch (error) {
+        logger.error(error)
+        Pop.toast(error.message, 'error')
+      }
+    })
     return {
+      newpost,
       route,
-      activeEvent: computed(() => AppState.activeEvent)
+      activeEvent: computed(() => AppState.activeEvent),
+      activeAttending: computed(() => AppState.activeAttending),
+      comments: computed(() => AppState.comments),
+      async create() {
+        try {
+          let newcomment = newpost.value
+          await commentsService.create(this.activeEvent.id, newcomment)
+          newpost.value = ({})
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      }
     }
   }
 }
@@ -75,9 +154,15 @@ export default {
 
 
 <style lang="scss" scoped>
+.inputwid {
+  border-color: #c8c8c8 !important;
+  width: 80vh;
+  height: 15vh;
+}
+
 .image {
   background-color: #474c61 !important;
-  height: 55vh;
+  height: auto;
 }
 .profiles {
   height: 10vh;
@@ -85,5 +170,23 @@ export default {
 }
 .fontcolor {
   color: #a0a2ad;
+}
+.scrollbar {
+  overflow-y: scroll;
+}
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: #2e2e2e;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #adadad;
+  border-radius: 10px;
+}
+.homeheight {
+  height: 100vh;
 }
 </style>

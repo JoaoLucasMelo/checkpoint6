@@ -14,7 +14,7 @@ AppState.towerEvents = towerEvents
 }
 async getActive(id){
   const res = await api.get('api/events/'+id)
-  logger.log(res.data)
+  logger.log('ACTIVE EVENT',res.data)
   let active = AppState.activeEvent
   active = res.data
   AppState.activeEvent = active
