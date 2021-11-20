@@ -2,20 +2,21 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 const ObjectId = mongoose.Types.ObjectId
 
-export const AttendeeSchema = new Schema({
+export const CommentSchema = new Schema({
 
   eventId: { type: ObjectId, required: true, ref: 'TowerEvent' },
-  accountId: { type: ObjectId, required: true, ref: 'Account' }
-
+  creatorId: { type: ObjectId, required: true, ref: 'Account' },
+  body: { type: String, required: true },
+  isAttending: { type: Boolean, default: false, required: true }
 }, { timestamps: true, toJSON: { virtuals: true } })
 
-AttendeeSchema.virtual('account', {
-  localField: 'accountId',
+CommentSchema.virtual('creator', {
+  localField: 'creatorId',
   ref: 'Account',
   foreignField: '_id',
   justOne: true
 })
-AttendeeSchema.virtual('event', {
+CommentSchema.virtual('event', {
   localField: 'eventId',
   ref: 'TowerEvent',
   foreignField: '_id',

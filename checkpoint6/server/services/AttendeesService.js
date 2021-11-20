@@ -1,4 +1,5 @@
 import { dbContext } from '../db/DbContext'
+import { Forbidden } from '../utils/Errors'
 import { towerEventsService } from './TowerEventsService'
 
 class AttendeesService {
@@ -7,7 +8,7 @@ class AttendeesService {
     return events
   }
 
-  async getAttending(query) {
+  async getAttending(query = {}) {
     const events = await dbContext.Attendee.find(query).populate('account').populate('event')
     return events
   }
@@ -19,5 +20,15 @@ class AttendeesService {
     await towerEventsService.capacity(data.eventId)
     return attendee
   }
+
+  async remove(id, userId) {
+    const found = await dbContext.Attendee.findById(id)
+    if (found.accountId.toString() !== userId) {
+      throw new Forbidden('You dont have Permition for this')
+    }
+    await dbContext.Attendee.findByIdAndDelete(id)
+    await towerEventsService.capacityDecrease(found.eventId)
+  }
 }
+
 export const attendeesService = new AttendeesService()

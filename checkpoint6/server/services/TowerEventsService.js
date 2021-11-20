@@ -34,7 +34,17 @@ class TowerEventsService {
 
   async capacity(id) {
     const update = await dbContext.TowerEvents.findById(id)
+    if (update.capacity <= 0) {
+      throw new BadRequest('This Event is Full')
+    }
     update.capacity--
+    const updated = await dbContext.TowerEvents.findByIdAndUpdate(id, update, { new: true })
+    return updated
+  }
+
+  async capacityDecrease(id) {
+    const update = await dbContext.TowerEvents.findById(id)
+    update.capacity++
     const updated = await dbContext.TowerEvents.findByIdAndUpdate(id, update, { new: true })
     return updated
   }
