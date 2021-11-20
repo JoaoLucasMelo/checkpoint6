@@ -2,7 +2,9 @@
   <div class="homeheight container-fluid scrollbar">
     <div class="row">
       <div class="col-12">
-        <img src="../assets/img/Logo.png" width="250" class="m-3" alt="" />
+        <router-link :to="{ name: 'Home' }">
+          <img src="../assets/img/Logo.png" width="250" class="m-3" alt="" />
+        </router-link>
       </div>
     </div>
     <div class="row justify-content-center">

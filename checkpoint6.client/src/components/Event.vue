@@ -15,7 +15,9 @@
       >
         <div class="card blurycards rounded-0">
           <div>
-            <p class="p-2 m-0 f-12">{{ towerEvents.name }}</p>
+            <p class="p-2 m-0 f-12">
+              {{ towerEvents.name }}
+            </p>
             <p>{{ towerEvents.capacity }}</p>
           </div>
         </div>
@@ -29,11 +31,13 @@
 import { computed } from "@vue/reactivity"
 export default {
   props: {
-    towerEvents: { type: Object, required: true }
+    towerEvents: { type: Object },
+    attending: { type: Object }
   },
+
   setup(props) {
     return {
-      coverImg: computed(() => `url(${props.towerEvents.coverImg})`)
+      coverImg: computed(() => `url(${props.towerEvents?.coverImg})`)
     }
   }
 }

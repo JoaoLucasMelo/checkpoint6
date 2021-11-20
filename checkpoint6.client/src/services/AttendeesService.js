@@ -12,5 +12,12 @@ async getActiveAttendees(id){
   active = res.data
   AppState.activeAttending = active
 }
+async getMyAttending(){
+  const res = await api('account/attendees')
+  logger.log('ATTENDING',res.data)
+  let attending = AppState.attending
+  attending = res.data
+  AppState.attending = attending
+}
 }
 export const attendeesService = new AttendeesService()

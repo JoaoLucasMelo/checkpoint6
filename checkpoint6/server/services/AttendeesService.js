@@ -5,12 +5,16 @@ import { towerEventsService } from './TowerEventsService'
 
 class AttendeesService {
   async getEventsByAtendee(query = {}) {
-    const events = await dbContext.Attendee.find(query).populate('account').populate('event')
+    const events = await dbContext.Attendee.find(query)
+      .populate('account')
+      .populate('event')
     return events
   }
 
   async getAttending(query = {}) {
-    const events = await dbContext.Attendee.find(query).populate('account').populate('event')
+    const events = await dbContext.Attendee.find(query)
+      .populate('account')
+      .populate('event')
     return events
   }
 
