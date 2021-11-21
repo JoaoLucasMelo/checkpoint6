@@ -26,5 +26,19 @@ async getCreatedEvents(userId){
   logger.log('TESTING', newarray)
   AppState.towerEvents = newarray
 }
+async editEvent(data){
+  const res = await api.put('api/events/'+ data.id, data)
+  logger.log('PUT EVENT', res.data)
+  let edited = res.data
+  AppState.activeEvent = edited
+  let index = AppState.towerEvents.findIndex( t => t.id === edited.id)
+  AppState.towerEvents.splice(index, 1, edited)
+}
+async cancel(id){
+  const res = await api.delete('api/events/'+ id)
+  logger.log('DELETE EVENT', res.data)
+  let canceled = res.data
+  AppState.activeEvent = canceled
+}
 }
 export const eventsService = new EventsService()

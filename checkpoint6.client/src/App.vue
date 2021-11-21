@@ -1,10 +1,9 @@
-<template>
-  <header></header>
+<template >
   <main class="d-flex background">
     <div class="col-md-11">
       <router-view />
     </div>
-    <div class="col-md-1">
+    <div class="col-md-1 mobieview">
       <Navigation />
     </div>
   </main>
@@ -31,5 +30,10 @@ export default {
 }
 p {
   font-family: "Nunito", sans-serif;
+}
+@media only screen and (max-width: 600px) {
+  .mobieview {
+    display: none;
+  }
 }
 </style>

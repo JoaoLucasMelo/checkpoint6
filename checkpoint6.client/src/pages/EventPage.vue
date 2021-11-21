@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid homeheight scrollbar">
+  <div class="container-fluid homeheight scrollbar background">
     <div class="row">
       <div class="col-12">
         <router-link :to="{ name: 'Home' }">
@@ -7,9 +7,9 @@
         </router-link>
       </div>
     </div>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center p-2">
       <div class="col-md-11 d-flex image bg-primary my-2 rounded">
-        <div class="row">
+        <div class="row p-2">
           <div
             class="col-md-4 justify-content-center d-flex align-items-center"
           >
@@ -22,31 +22,112 @@
             />
           </div>
           <div class="col-md-8 p-2">
-            <div class="text-end">butao</div>
+            <div class="d-flex justify-content-end dropdown">
+              <button
+                v-if="activeEvent.creatorId === account.id"
+                aria-label="dropdown button"
+                data-bs-toggle="dropdown"
+                id="dropDownMenu"
+                class="btn m-0 p-0"
+              >
+                <div
+                  title="Options"
+                  class="text-end dotbtn mdi mdi-36px mdi-dots-horizontal"
+                ></div>
+              </button>
+              <ul
+                class="dropdown-menu text-center"
+                aria-labelledby="dropdownMenuButton1"
+              >
+                <li
+                  v-show="activeEvent.isCanceled === false"
+                  data-bs-toggle="modal"
+                  :data-bs-target="'#a' + activeEvent.id + 'a'"
+                  title="Edit Event"
+                  class="dropdown-item"
+                >
+                  <i class="mdi mdi-24px mdi-pencil coloredit selectable1">
+                    Edit Event</i
+                  >
+                </li>
+                <li
+                  v-if="activeEvent.isCanceled === false"
+                  @click="removeEvent"
+                  title="Edit Event"
+                  class="dropdown-item"
+                >
+                  <i class="mdi mdi-24px mdi-trash-can coloredit selectable1">
+                    Cancel Event</i
+                  >
+                </li>
+                <li v-else title="Can't Uncancel event" class="dropdown-item">
+                  <i class="text-danger coloredit no-select"> Event Canceled</i>
+                </li>
+              </ul>
+            </div>
             <div class="d-flex justify-content-between">
               <div>
-                <p>{{ activeEvent.name }}</p>
-                <p>{{ activeEvent.location }}</p>
+                <p class="titlecard m-0">{{ activeEvent.name }}</p>
+                <p class="m-0 mb-3 mt-1 localtitle">
+                  {{ activeEvent.location }}
+                </p>
               </div>
               <div>
-                <p>{{ activeEvent.startDate }}</p>
+                <p class="m-0 text-light pe-2">{{ activeEvent.startDate }}</p>
               </div>
             </div>
             <div>
-              <p>{{ activeEvent.description }}</p>
+              <p class="pt-2 desctitle">{{ activeEvent.description }}</p>
             </div>
+            <div class="emptyspace"></div>
             <div class="d-flex justify-content-between">
-              <div>
-                <p>{{ activeEvent.capacity }}</p>
+              <div class="d-flex align-items-center">
+                <div>
+                  <p class="capacitytitle">
+                    {{ activeEvent.capacity }}
+                  </p>
+                </div>
+                <div class="localtitle mb-0 ms-2">
+                  <p>Spots Available</p>
+                </div>
               </div>
-              <div>ATTEND</div>
+              <div class="me-3 mb-3">
+                <button
+                  v-if="attending === true"
+                  @click="notattend"
+                  class="btn btnattending ps-3 elevation-3 border-0"
+                >
+                  Attending! <i class="ms-2 mdi mdi-18px mdi-human pe-1"></i>
+                </button>
+                <button
+                  v-else-if="activeEvent.capacity > 0"
+                  v-show="attending === false"
+                  @click="attend"
+                  class="btn btn-warning btnattend ps-3 elevation-3 border-0"
+                >
+                  Attend <i class="ms-2 mdi mdi-18px mdi-human pe-1"></i>
+                </button>
+                <button
+                  v-else
+                  class="
+                    btn btn-warning
+                    btnattendno
+                    border-0
+                    ps-3
+                    elevation-3
+                    no-select
+                  "
+                >
+                  No spots left <i class="ms-2 mdi mdi-18px mdi-human pe-1"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-md-11">
         <p class="m-0 p-1 fontcolor">See who is attending</p>
-        <div class="card profiles p-1">
+        <div class="card profiles d-flex flex-row flex-wrap p-1">
           <div v-for="p in activeAttending" :key="p.id">
             <img
               class="rounded rounded-pill"
@@ -59,10 +140,10 @@
         </div>
       </div>
       <div class="row justify-content-center mt-5">
-        <div class="col-8">
-          <div class="card">
-            <div class="d-flex justify-content-end mt-2">
-              <p>Join the conversation</p>
+        <div class="col-md-7 mb-3">
+          <div class="card image">
+            <div class="d-flex justify-content-end mt-2 margin">
+              <p class="m-1 green">Join the conversation</p>
             </div>
             <form @submit.prevent="create">
               <div class="d-flex justify-content-center mt-2">
@@ -72,18 +153,30 @@
                   type="text"
                   name=""
                   id=""
-                  v-model="newpost.body"
+                  v-model="state.editable.body"
                 ></textarea>
               </div>
-              <div class="d-flex justify-content-end mt-2 margin">
-                <button type="submit" class="btn btn-primary">
+              <div class="d-flex justify-content-end mt-3 margin">
+                <button
+                  type="submit"
+                  class="btn bggreen py-2 postbtn elevation-3"
+                >
                   Post comment
                 </button>
               </div>
             </form>
-            <div>
-              <div v-for="c in comments" :key="c.id">
-                <Comment :comments="c" />
+            <div
+              class="
+                d-flex
+                justify-content-center
+                flex-column
+                align-items-center
+                mt-2
+                mb-3
+              "
+            >
+              <div class="col-md-11" v-for="c in comments" :key="c.id">
+                <Comment :comment="c" />
               </div>
             </div>
           </div>
@@ -91,11 +184,12 @@
       </div>
     </div>
   </div>
+  <CreateEvent :activeEvent="activeEvent" />
 </template>
 
 
 <script>
-import { computed, onMounted, ref, watchEffect } from "@vue/runtime-core"
+import { computed, onMounted, reactive, ref, watchEffect } from "@vue/runtime-core"
 import { logger } from "../utils/Logger"
 import Pop from "../utils/Pop"
 import { eventsService } from "../services/EventsService"
@@ -105,8 +199,11 @@ import { useRoute } from "vue-router"
 import { AppState } from "../AppState"
 export default {
   setup() {
-    const newpost = ref({})
     const route = useRoute()
+    let attending = ref(false)
+    let state = reactive({
+      editable: { eventId: route.params.id },
+    })
     onMounted(async () => {
       try {
         await eventsService.getActive(route.params.id)
@@ -132,16 +229,43 @@ export default {
       }
     })
     return {
-      newpost,
+      attending,
+      state,
       route,
       activeEvent: computed(() => AppState.activeEvent),
       activeAttending: computed(() => AppState.activeAttending),
       comments: computed(() => AppState.comments),
+      account: computed(() => AppState.account),
       async create() {
         try {
-          let newcomment = newpost.value
-          await commentsService.create(this.activeEvent.id, newcomment)
-          newpost.value = ({})
+          await commentsService.create(state.editable)
+          state.editable = { eventId: route.params.id }
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
+      async removeEvent() {
+        try {
+          await eventsService.cancel(this.activeEvent.id)
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
+      async attend() {
+        try {
+          await attendeesService.attend(this.activeEvent.id)
+          attending.value = !attending.value
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
+      async notattend() {
+        try {
+          await attendeesService.notattend(this.activeEvent.id)
+          attending.value = true
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
@@ -154,10 +278,63 @@ export default {
 
 
 <style lang="scss" scoped>
+.btnattendno {
+  color: #862f3f;
+  background-color: #ff5977;
+  font-weight: 500;
+  font-size: 15px;
+}
+.desctitle {
+  font-weight: 400;
+  line-height: 25px;
+  font-size: 15px;
+  color: #e4e4e4;
+}
+.btnattend {
+  font-weight: 500;
+  font-size: 15px;
+}
+.btnattending {
+  font-weight: 500;
+  font-size: 15px;
+  background-color: #72d8a2;
+}
+.capacitytitle {
+  color: #56c7fb;
+  font-weight: 600;
+  font-size: 19px;
+}
+.emptyspace {
+  height: 13vh;
+}
+.titlecard {
+  color: rgb(238, 238, 238);
+  font-weight: 500;
+  font-size: 18px;
+}
+.localtitle {
+  color: #ccf3fd;
+  font-weight: 500;
+  font-size: 15px;
+}
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+.dotbtn {
+  color: #ccf3fd;
+  margin-right: 2vh;
+}
+.background {
+  background-color: #2a2d3a;
+}
 .inputwid {
   border-color: #c8c8c8 !important;
-  width: 80vh;
+  width: 90%;
   height: 15vh;
+}
+.margin {
+  margin-right: 5%;
 }
 
 .image {
@@ -177,6 +354,9 @@ export default {
 .scrollbar::-webkit-scrollbar {
   width: 8px;
 }
+.postbtn {
+  font-weight: 600;
+}
 
 .scrollbar::-webkit-scrollbar-track {
   background: #2e2e2e;
@@ -188,5 +368,16 @@ export default {
 }
 .homeheight {
   height: 100vh;
+}
+.green {
+  color: #72d8a2;
+}
+.bggreen {
+  background-color: #72d8a2;
+}
+@media only screen and (max-width: 600px) {
+  .homeheight {
+    height: 100%;
+  }
 }
 </style>

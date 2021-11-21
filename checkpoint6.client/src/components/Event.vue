@@ -10,7 +10,7 @@
           m-3
           d-flex
           justify-content-end
-          selectable1
+          action
         "
       >
         <div class="card blurycards rounded-0">

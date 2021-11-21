@@ -12,9 +12,19 @@ async getComments(id){
   eventComments = res.data
   AppState.comments = eventComments
 }
-async create(eventId, commentdata){
-  const res = await api.post('api/comments',{eventId: eventId,body: commentdata})
+async create(commentdata){
+  const res = await api.post('api/comments',commentdata)
   logger.log('COMMENT CREATE',res.data)
+  let newcomment = AppState.comments
+  newcomment.unshift(res.data)
+  AppState.comments = newcomment
+}
+async remove(id){
+  const res = await api.delete('/api/comments/'+ id)
+  logger.log('DELETE COMMENT', res.data)
+  let deleted = res.data
+ let newcomments = AppState.comments.filter( c => c.id !== deleted.id)
+ AppState.comments = newcomments
 }
 }
 export const commentsService = new CommentsService()
