@@ -75,7 +75,7 @@ export default {
   overflow-y: scroll;
 }
 .scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 
 .scrollbar::-webkit-scrollbar-track {

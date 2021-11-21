@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid homeheight scrollbar background">
     <div class="row">
-      <div class="col-12">
+      <div class="col-md-12">
         <router-link :to="{ name: 'Home' }">
           <img src="../assets/img/Logo.png" width="250" class="m-3" alt="" />
         </router-link>
@@ -22,9 +22,11 @@
             />
           </div>
           <div class="col-md-8 p-2">
-            <div class="d-flex justify-content-end dropdown">
+            <div
+              v-if="activeEvent.creatorId === account.id"
+              class="d-flex justify-content-end dropdown"
+            >
               <button
-                v-if="activeEvent.creatorId === account.id"
                 aria-label="dropdown button"
                 data-bs-toggle="dropdown"
                 id="dropDownMenu"
@@ -65,6 +67,7 @@
                 </li>
               </ul>
             </div>
+            <div v-else class="emptyspotif"></div>
             <div class="d-flex justify-content-between">
               <div>
                 <p class="titlecard m-0">{{ activeEvent.name }}</p>
@@ -91,9 +94,9 @@
                   <p>Spots Available</p>
                 </div>
               </div>
-              <div class="me-3 mb-3">
+              <div v-if="user.isAuthenticated" class="me-3 mb-3">
                 <button
-                  v-if="attending === true"
+                  v-if="myActiveAttend"
                   @click="notattend"
                   class="btn btnattending ps-3 elevation-3 border-0"
                 >
@@ -101,7 +104,6 @@
                 </button>
                 <button
                   v-else-if="activeEvent.capacity > 0"
-                  v-show="attending === false"
                   @click="attend"
                   class="btn btn-warning btnattend ps-3 elevation-3 border-0"
                 >
@@ -125,17 +127,23 @@
           </div>
         </div>
       </div>
-      <div class="col-md-11">
-        <p class="m-0 p-1 fontcolor">See who is attending</p>
-        <div class="card profiles d-flex flex-row flex-wrap p-1">
-          <div v-for="p in activeAttending" :key="p.id">
-            <img
-              class="rounded rounded-pill"
-              :src="p.account.picture"
-              height="40"
-              alt=""
-              :title="p.account.name"
-            />
+      <div class="col-md-11 d-flex justify-content-center">
+        <div>
+          <div>
+            <p class="m-0 p-1 fontcolor">See who is attending</p>
+          </div>
+          <div class="d-flex justify-content-center">
+            <div class="card profiles d-flex flex-row flex-wrap p-1">
+              <div v-for="p in activeAttending" :key="p.id">
+                <img
+                  class="rounded rounded-pill"
+                  :src="p.account.picture"
+                  height="40"
+                  alt=""
+                  :title="p.account.name"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -189,7 +197,7 @@
 
 
 <script>
-import { computed, onMounted, reactive, ref, watchEffect } from "@vue/runtime-core"
+import { computed, onMounted, reactive } from "@vue/runtime-core"
 import { logger } from "../utils/Logger"
 import Pop from "../utils/Pop"
 import { eventsService } from "../services/EventsService"
@@ -197,10 +205,10 @@ import { attendeesService } from "../services/AttendeesService"
 import { commentsService } from "../services/CommentsService"
 import { useRoute } from "vue-router"
 import { AppState } from "../AppState"
+
 export default {
   setup() {
     const route = useRoute()
-    let attending = ref(false)
     let state = reactive({
       editable: { eventId: route.params.id },
     })
@@ -213,11 +221,13 @@ export default {
       }
     })
     onMounted(async () => {
-      try {
-        await attendeesService.getActiveAttendees(route.params.id)
-      } catch (error) {
-        logger.error(error)
-        Pop.toast(error.message, 'error')
+      if (user.isAuthenticated) {
+        try {
+          await attendeesService.getActiveAttendees(route.params.id)
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
       }
     })
     onMounted(async () => {
@@ -229,13 +239,14 @@ export default {
       }
     })
     return {
-      attending,
       state,
       route,
       activeEvent: computed(() => AppState.activeEvent),
       activeAttending: computed(() => AppState.activeAttending),
       comments: computed(() => AppState.comments),
       account: computed(() => AppState.account),
+      user: computed(() => AppState.user),
+      myActiveAttend: computed(() => AppState.myActiveAttend),
       async create() {
         try {
           await commentsService.create(state.editable)
@@ -256,7 +267,6 @@ export default {
       async attend() {
         try {
           await attendeesService.attend(this.activeEvent.id)
-          attending.value = !attending.value
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
@@ -265,7 +275,6 @@ export default {
       async notattend() {
         try {
           await attendeesService.notattend(this.activeEvent.id)
-          attending.value = true
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
@@ -278,6 +287,9 @@ export default {
 
 
 <style lang="scss" scoped>
+.emptyspotif {
+  height: 2vh;
+}
 .btnattendno {
   color: #862f3f;
   background-color: #ff5977;
@@ -343,6 +355,8 @@ export default {
 }
 .profiles {
   height: 10vh;
+
+  width: 105vh;
   background-color: #474c61 !important;
 }
 .fontcolor {
@@ -352,7 +366,7 @@ export default {
   overflow-y: scroll;
 }
 .scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 0px;
 }
 .postbtn {
   font-weight: 600;
