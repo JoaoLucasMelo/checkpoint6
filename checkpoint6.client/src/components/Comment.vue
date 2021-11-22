@@ -15,10 +15,6 @@
         <div class="d-flex justify-content-between">
           <p class="m-0 mt-2 fw">
             {{ comment.creator.name }}
-            <i
-              :title="comment.creator.name + ' is attending to this event'"
-              class="mdi mdi-human"
-            ></i>
           </p>
           <i
             @click="remove"
