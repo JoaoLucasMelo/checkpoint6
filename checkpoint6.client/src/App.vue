@@ -3,11 +3,13 @@
     <div class="col-md-11">
       <router-view />
     </div>
-    <div class="col-md-1 mobieview">
+    <div class="col-1 mobieview">
       <Navigation />
     </div>
   </main>
   <footer></footer>
+  <CreateEvent />
+  <OffCanvasProfile />
 </template>
 
 <script>

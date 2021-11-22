@@ -1,7 +1,7 @@
 <template>
   <div class="eventmodal">
     <div
-      :id="'a' + activeEvent.id + 'a'"
+      :id="'modalcreateedit'"
       class="modal fade"
       tabindex="-1"
       role="dialog"
@@ -49,7 +49,7 @@
                 required
                 v-model="eventData.location"
                 class="m-2 border-dark"
-                type="url"
+                type="text"
               />
               <p class="m-0">Event Capacity:</p>
               <input
@@ -61,30 +61,32 @@
               <p class="m-0">Event Start Date:</p>
               <input
                 required
+                min="2020-01-01"
+                max="2030-12-31"
                 v-model="eventData.startDate"
                 class="m-2 border-dark"
-                type="number"
+                type="date"
               />
               <p class="m-0">Event Category:</p>
               <div class="btn-group">
-                <button
-                  type="button"
-                  class="btn btn-primary dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Category
-                </button>
-                <ul class="dropdown-menu text-center">
-                  <li>
-                    <a class="dropdown-item" value="">Concert</a>
-                  </li>
-                  <li><a class="dropdown-item" href="#">Convention</a></li>
-                  <li>
-                    <a class="dropdown-item" href="#">Sport</a>
-                  </li>
-                  <li><a class="dropdown-item" href="#">Digital</a></li>
-                </ul>
+                <select required class="" v-model="eventData.type">
+                  <option>
+                    <a class="dropdown-item" value="concert">concert</a>
+                  </option>
+                  <option>
+                    <a class="dropdown-item" value="convention" href="#"
+                      >convention</a
+                    >
+                  </option>
+                  <option>
+                    <a class="dropdown-item" value="sport" href="#">sport</a>
+                  </option>
+                  <option>
+                    <a class="dropdown-item" value="digital" href="#"
+                      >digital</a
+                    >
+                  </option>
+                </select>
               </div>
               <div></div>
             </form>
@@ -98,13 +100,11 @@
               Close
             </button>
             <button
-              @click="handleSubmit"
               type="submit"
               form="eventForm"
               class="btn btn-primary text-white"
-              data-bs-dismiss="modal"
             >
-              {{ eventData.id ? "Save" : "Create" }}
+              {{ eventData.id ? "Save" : "Post" }}
             </button>
           </div>
         </div>
@@ -132,7 +132,7 @@ export default {
   setup(props) {
     const eventData = ref({})
     watchEffect(() => {
-      eventData.value = { ...props.activeEvent }
+      eventData.value = {}
     });
     const router = useRouter()
     return {
@@ -148,10 +148,10 @@ export default {
             await eventsService.createEvent(eventData.value)
             Pop.toast('Event Created', 'success')
             eventData.value = {}
-            router.push({ name: 'Event', params: { eventId: AppState.activeEvent.id } })
+            router.push({ name: 'Event', params: { id: AppState.towerEvents[0].id } })
           }
-          const modelElem = document.getElementById('a' + this.activeEvent.id + 'a')
-          Modal.getOrCreateInstance(modelElem).hide()
+          const modelElem = document.getElementById('modalcreateedit')
+          Modal.getOrCreateInstance(modelElem).toggle()
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')

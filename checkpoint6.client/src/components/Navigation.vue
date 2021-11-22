@@ -5,16 +5,19 @@
         v-if="user.isAuthenticated"
         class="col-12 d-flex navheight flex-column align-items-center"
       >
-        <router-link :to="{ name: 'Account' }">
-          <div class="mt-4">
-            <img
-              class="rounded elevation-3"
-              width="85"
-              :src="user.picture"
-              alt=""
-            />
-          </div>
-        </router-link>
+        <div
+          data-bs-toggle="offcanvas"
+          href="#offcanvasExample"
+          role="button"
+          class="mt-4"
+        >
+          <img
+            class="rounded elevation-3"
+            width="85"
+            :src="user.picture"
+            alt=""
+          />
+        </div>
         <div>
           <router-link :to="{ name: 'Home' }">
             <button class="btn buttonanim mt-3"><span>Home</span></button>
@@ -26,7 +29,11 @@
           </router-link>
         </div>
         <div>
-          <button class="mt-5 btn bggreen py-2 postbtn elevation-3">
+          <button
+            data-bs-toggle="modal"
+            data-bs-target="#modalcreateedit"
+            class="mt-5 btn bggreen py-2 postbtn elevation-3"
+          >
             New Event
           </button>
         </div>
@@ -100,37 +107,34 @@ export default {
   color: #96d4f1;
   text-align: center;
   font-size: 17px;
-  padding: 20px;
-  width: 17vh;
-  height: 52px;
-  transition: all 0.5s;
+
   cursor: pointer;
 }
 
-.buttonanim span {
-  cursor: pointer;
-  display: inline-flex;
-  position: relative;
-  transition: 0.5s;
-}
+// .buttonanim span {
+//   cursor: pointer;
+//   display: inline-flex;
+//   position: relative;
+//   transition: 0.5s;
+// }
 
-.buttonanim span:after {
-  content: "\00bb";
-  position: absolute;
-  opacity: 0;
-  top: 0;
-  right: -20px;
-  transition: 0.5s;
-}
+// .buttonanim span:after {
+//   content: "\00bb";
+//   position: absolute;
+//   opacity: 0;
+//   top: 0;
+//   right: -10px;
+//   transition: 0.5s;
+// }
 
-.buttonanim:hover span {
-  padding-right: 25px;
-}
+// .buttonanim:hover span {
+//   padding-right: 10px;
+// }
 
-.buttonanim:hover span:after {
-  opacity: 1;
-  right: 0;
-}
+// .buttonanim:hover span:after {
+//   opacity: 1;
+//   right: 0;
+// }
 .postbtn {
   font-weight: 600;
 }

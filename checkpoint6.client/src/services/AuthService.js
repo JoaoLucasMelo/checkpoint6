@@ -2,8 +2,12 @@ import { initialize } from '@bcwdev/auth0provider-client'
 import { AppState } from '../AppState'
 import { audience, clientId, domain } from '../env'
 import { router } from '../router'
+import { logger } from "../utils/Logger"
+import Pop from "../utils/Pop"
 import { accountService } from './AccountService'
+import { attendeesService } from "./AttendeesService"
 import { api } from './AxiosService'
+import { eventsService } from "./EventsService"
 import { socketService } from './SocketService'
 
 export const AuthService = initialize({
@@ -27,7 +31,15 @@ AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async function() {
   await accountService.getAccount()
   socketService.authenticate(AuthService.bearer)
   // NOTE if there is something you want to do once the user is authenticated, place that here
-})
+  eventsService.getAll()
+
+    try {
+      await attendeesService.getActiveAttendees(route.params.id)
+    } catch (error) {
+      logger.error(error)
+      Pop.toast(error.message, 'error')
+    }
+  })
 
 async function refreshAuthToken(config) {
   if (!AuthService.isAuthenticated) { return config }

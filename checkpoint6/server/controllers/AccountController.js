@@ -11,6 +11,7 @@ export class AccountController extends BaseController {
       .use(Auth0Provider.getAuthorizedUserInfo)
       .get('', this.getUserAccount)
       .get('/attendees', this.getAttending)
+      .put('', this.updateAccount)
   }
 
   async getUserAccount(req, res, next) {
@@ -27,6 +28,15 @@ export class AccountController extends BaseController {
       const accountId = req.userInfo.id
       const events = await attendeesService.getAttending({ accountId: accountId })
       return res.send(events)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async updateAccount(req, res, next) {
+    try {
+      const account = await accountService.updateAccount(req.userInfo, req.body)
+      res.send(account)
     } catch (error) {
       next(error)
     }
