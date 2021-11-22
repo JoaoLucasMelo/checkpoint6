@@ -94,7 +94,7 @@ export default {
   border-width: 6px !important;
   border-color: #474c61 !important;
   background-image: v-bind(coverImg);
-  object-fit: cover;
+  background-size: cover;
 }
 .canceledevent {
   background: rgb(224, 55, 55);

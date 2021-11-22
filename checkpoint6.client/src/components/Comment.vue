@@ -1,9 +1,9 @@
 <template>
   <div class="comment">
-    <div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-center alignmobile align-items-center">
       <div>
         <img
-          class="rounded roundie elevation-3"
+          class="rounded roundie elevation-3 picsizemobile"
           :src="comment.creator.picture"
           height="75"
           width="75"
@@ -78,5 +78,15 @@ export default {
 .roundie {
   border-radius: 50% !important;
   object-fit: cover;
+}
+@media only screen and (max-width: 600px) {
+  .picsizemobile {
+    height: 50px !important;
+    width: 50px !important;
+    margin-top: 9px;
+  }
+  .alignmobile {
+    align-items: unset !important;
+  }
 }
 </style>

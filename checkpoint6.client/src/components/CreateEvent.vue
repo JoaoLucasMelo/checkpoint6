@@ -30,10 +30,10 @@
                 class="m-2 border-dark"
                 type="text"
               />
-              <p class="m-0">Description:</p>
+              <p class="m-0 mobilewidth">Description:</p>
               <textarea
                 v-model="eventData.description"
-                class="m-2 border-dark"
+                class="m-2 mobilewidth border-dark"
                 cols="50"
                 required
               />
@@ -167,5 +167,10 @@ export default {
 .btn:focus {
   outline: none;
   box-shadow: none;
+}
+@media only screen and (max-width: 600px) {
+  .mobilewidth {
+    width: 35vh !important;
+  }
 }
 </style>

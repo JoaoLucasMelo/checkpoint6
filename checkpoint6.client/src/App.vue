@@ -1,7 +1,7 @@
 <template >
   <main class="d-flex background">
-    <div class="col-md-11">
-      <router-view />
+    <div class="col-12 col-md-11">
+      <router-view :account="account" />
     </div>
     <div class="col-1 mobieview">
       <Navigation :account="account" />

@@ -114,31 +114,6 @@ export default {
 
   cursor: pointer;
 }
-
-// .buttonanim span {
-//   cursor: pointer;
-//   display: inline-flex;
-//   position: relative;
-//   transition: 0.5s;
-// }
-
-// .buttonanim span:after {
-//   content: "\00bb";
-//   position: absolute;
-//   opacity: 0;
-//   top: 0;
-//   right: -10px;
-//   transition: 0.5s;
-// }
-
-// .buttonanim:hover span {
-//   padding-right: 10px;
-// }
-
-// .buttonanim:hover span:after {
-//   opacity: 1;
-//   right: 0;
-// }
 .picuser {
   object-fit: cover;
 }
