@@ -21,7 +21,7 @@
           >
             <div class="width100">
               <img
-                class="m-3 my-4 boardpic"
+                class="m-3 my-4 rounded boardpic elevation-3"
                 :src="activeEvent.coverImg"
                 alt=""
               />
@@ -310,7 +310,7 @@
             >
               <div class="row commentsize justify-content-center">
                 <div class="col-md-11" v-for="c in comments" :key="c.id">
-                  <Comment :comment="c" />
+                  <Comment :activeAttending="activeAttending" :comment="c" />
                 </div>
               </div>
             </div>
@@ -390,8 +390,12 @@ export default {
       },
       async removeEvent() {
         try {
+
           if (this.activeAttending.length === 0) {
-            await eventsService.cancel(this.activeEvent.id)
+            if (await Pop.confirm()) {
+              await eventsService.cancel(this.activeEvent.id)
+              Pop.toast('Event Canceled!', 'success')
+            }
           }
           else { Pop.toast('Cannot cancel events with current attendance', 'info') }
         } catch (error) {

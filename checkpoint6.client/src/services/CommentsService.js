@@ -15,9 +15,14 @@ async getComments(id){
 async create(commentdata){
   const res = await api.post('api/comments',commentdata)
   logger.log('COMMENT CREATE',res.data)
+  let commentjustnow = res.data
   let newcomment = AppState.comments
-  newcomment.unshift(res.data)
+  newcomment.unshift(commentjustnow)
   AppState.comments = newcomment
+  // logger.log(commentjustnow)
+  // if( AppState.myActiveAttend.accountId === commentjustnow.creatorId){
+  //  await this.attend(commentjustnow.id)
+  // }
 }
 async remove(id){
   const res = await api.delete('/api/comments/'+ id)
@@ -25,6 +30,14 @@ async remove(id){
   let deleted = res.data
  let newcomments = AppState.comments.filter( c => c.id !== deleted.id)
  AppState.comments = newcomments
+}
+async attend(id){
+  const res = await api.put('api/comments/'+ id, true )
+  logger.log('ATTEND ON COMMENT', res.data)
+}
+async notattend(id){
+  const res = await api.put('api/comments/'+ id, false )
+  logger.log('NOT ATTEND ON COMMENT', res.data)
 }
 }
 export const commentsService = new CommentsService()

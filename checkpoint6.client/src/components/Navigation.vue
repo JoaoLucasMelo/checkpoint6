@@ -12,9 +12,10 @@
           class="mt-4"
         >
           <img
-            class="rounded elevation-3"
+            class="rounded picuser elevation-3"
             width="85"
-            :src="user.picture"
+            height="85"
+            :src="account.picture"
             alt=""
           />
         </div>
@@ -74,6 +75,9 @@ import { computed } from "@vue/reactivity"
 import { AppState } from "../AppState"
 import { AuthService } from "../services/AuthService"
 export default {
+  props: {
+    account: { type: Object, required: true }
+  },
   setup() {
     return {
       user: computed(() => AppState.user),
@@ -135,6 +139,9 @@ export default {
 //   opacity: 1;
 //   right: 0;
 // }
+.picuser {
+  object-fit: cover;
+}
 .postbtn {
   font-weight: 600;
 }

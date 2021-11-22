@@ -3,16 +3,23 @@
     <div class="d-flex justify-content-center align-items-center">
       <div>
         <img
-          class="rounded rounded-pill elevation-3"
+          class="rounded roundie elevation-3"
           :src="comment.creator.picture"
           height="75"
+          width="75"
           alt=""
           :title="comment.creator.name"
         />
       </div>
       <div class="card commentspace m-2 elevation-3">
         <div class="d-flex justify-content-between">
-          <p class="m-0 mt-2 fw">{{ comment.creator.name }}</p>
+          <p class="m-0 mt-2 fw">
+            {{ comment.creator.name }}
+            <i
+              :title="comment.creator.name + ' is attending to this event'"
+              class="mdi mdi-human"
+            ></i>
+          </p>
           <i
             @click="remove"
             title="Remove Comment"
@@ -35,7 +42,8 @@ import Pop from "../utils/Pop"
 import { commentsService } from "../services/CommentsService"
 export default {
   props: {
-    comment: { type: Object, required: true }
+    comment: { type: Object, required: true },
+    activeAttending: { type: Object, required: true }
   },
   setup(props) {
     return {
@@ -43,8 +51,11 @@ export default {
       account: computed(() => AppState.account),
       async remove() {
         try {
-          await commentsService.remove(props.comment.id)
-          await commentsService.getComments(props.comment.eventId)
+          if (await Pop.confirm()) {
+            await commentsService.remove(props.comment.id)
+            await commentsService.getComments(props.comment.eventId)
+            Pop.toast('Comment Removed', 'success')
+          }
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
@@ -67,5 +78,9 @@ export default {
 }
 .fw {
   font-weight: 600;
+}
+.roundie {
+  border-radius: 50% !important;
+  object-fit: cover;
 }
 </style>

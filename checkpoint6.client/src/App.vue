@@ -4,7 +4,7 @@
       <router-view />
     </div>
     <div class="col-1 mobieview">
-      <Navigation />
+      <Navigation :account="account" />
     </div>
   </main>
   <footer></footer>
@@ -19,7 +19,8 @@ export default {
   name: 'App',
   setup() {
     return {
-      appState: computed(() => AppState)
+      appState: computed(() => AppState),
+      account: computed(() => AppState.account)
     }
   }
 }
