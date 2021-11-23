@@ -313,7 +313,7 @@
                 <div v-if="user.isAuthenticated" class="me-3 mb-3">
                   <button
                     v-if="myActiveAttend"
-                    @click="notattend(myActiveAttend.id)"
+                    @click="notattend(activeEvent.id, myActiveAttend.id)"
                     class="btn btnattending ps-3 elevation-3 border-0"
                   >
                     Attending! <i class="ms-2 mdi mdi-18px mdi-human pe-1"></i>
@@ -751,9 +751,9 @@ export default {
           Pop.toast(error.message, 'error')
         }
       },
-      async notattend(id) {
+      async notattend(eventId, id) {
         try {
-          await attendeesService.notattend(id)
+          await attendeesService.notattend(eventId, id)
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')

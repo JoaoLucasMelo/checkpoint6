@@ -142,7 +142,7 @@ export default {
   box-shadow: none;
 }
 .heightbig {
-  height: 38vh;
+  height: 33vh;
 }
 .johnmelo {
   font-size: 12px;

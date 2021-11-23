@@ -119,7 +119,7 @@
               <div class="col-12 col-md-1 d-md-flex justify-self-center">
                 <div class="">
                   <button
-                    @click="notattend(e.id)"
+                    @click="notattend(e.eventId, e.id)"
                     class="
                       ms-md-2
                       w-100
@@ -190,9 +190,9 @@ export default {
       async logout() {
         AuthService.logout({ returnTo: window.location.origin })
       },
-      async notattend(id) {
+      async notattend(eventId, id) {
         try {
-          await attendeesService.notattend(id)
+          await attendeesService.notattendaccount(eventId, id)
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
