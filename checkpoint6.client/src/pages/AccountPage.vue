@@ -129,9 +129,10 @@
                       mt-2
                       elevation-3
                       border-0
+                      mb-3
                     "
                   >
-                    Attending! <i class="ms-2 mdi mdi-18px mdi-human pe-1"></i>
+                    Not Attend <i class="ms-2 mdi mdi-18px mdi-human pe-1"></i>
                   </button>
                 </div>
               </div>
@@ -206,7 +207,7 @@ export default {
 .btnattending {
   font-weight: 500;
   font-size: 15px;
-  background-color: #72d8a2;
+  background-color: #ff8929;
 }
 .fontcolor {
   color: #a0a2ad;

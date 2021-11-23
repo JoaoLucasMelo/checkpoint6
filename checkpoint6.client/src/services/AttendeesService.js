@@ -33,14 +33,15 @@ async attend(id){
   this.getActiveAttendees(id)
 }
 async notattend(id){
-  const actual = AppState.myActiveAttend
-  const res = await api.delete('api/attendees/'+ actual.id)
+  const res = await api.delete('api/attendees/'+ id)
   logger.log('NOT ATTENDING', res.data)
   let notattend = res.data
+  AppState.attending = AppState.attending.filter( a=> a.id !== id)
+  AppState.activeAttending = AppState.activeAttending.filter( a=> a.id !== id)
   // AppState.activeEvent = notattend.event
-  eventsService.getActive(id)
-  await this.getActiveAttendees(id)
-  await this.getMyAttending()
+  // eventsService.getActive(id)
+  // await this.getActiveAttendees(id)
+  // await this.getMyAttending()
   await this.findActiveAttending(notattend.event)
 }
 async findActiveAttending(eventId){

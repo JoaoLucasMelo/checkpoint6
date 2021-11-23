@@ -3,48 +3,57 @@
     <div class="row">
       <div
         v-if="user.isAuthenticated"
-        class="col-12 d-flex navheight flex-column align-items-center"
+        class="col-12 d-flex navheight flex-column"
       >
         <div
-          data-bs-toggle="offcanvas"
-          href="#offcanvasExample"
-          role="button"
-          class="mt-4"
+          class="align-items-center d-flex flex-column justify-content-between"
         >
-          <img
-            class="rounded picuser elevation-3"
-            width="85"
-            height="85"
-            :src="account.picture"
-            alt=""
-          />
-        </div>
-        <div>
-          <router-link :to="{ name: 'Home' }">
-            <button class="btn buttonanim mt-3"><span>Home</span></button>
-          </router-link>
-        </div>
-        <div>
-          <router-link :to="{ name: 'Account' }">
-            <button class="btn buttonanim"><span>Account</span></button>
-          </router-link>
-        </div>
-        <div>
-          <button
-            data-bs-toggle="modal"
-            data-bs-target="#modalcreateedit"
-            class="mt-5 btn bggreen py-2 postbtn elevation-3"
+          <div
+            data-bs-toggle="offcanvas"
+            href="#offcanvasExample"
+            role="button"
+            class="mt-4"
           >
-            New Event
-          </button>
-        </div>
-        <div>
-          <button
-            @click="logout"
-            class="mt-5 btn bgtransparent py-2 postbtn border elevation-3"
-          >
-            Logout
-          </button>
+            <img
+              class="rounded picuser elevation-3"
+              width="85"
+              height="85"
+              :src="account.picture"
+              alt=""
+            />
+          </div>
+          <div>
+            <router-link :to="{ name: 'Home' }">
+              <button class="btn buttonanim mt-3"><span>Home</span></button>
+            </router-link>
+          </div>
+          <div>
+            <router-link :to="{ name: 'Account' }">
+              <button class="btn buttonanim"><span>Account</span></button>
+            </router-link>
+          </div>
+          <div>
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#modalcreateedit"
+              class="mt-5 btn bggreen py-2 postbtn elevation-3"
+            >
+              New Event
+            </button>
+          </div>
+          <div>
+            <button
+              @click="logout"
+              class="mt-5 btn bgtransparent py-2 postbtn border elevation-3"
+            >
+              Logout
+            </button>
+          </div>
+          <div class="heightbig"></div>
+          <div class="d-flex flex-column align-items-center">
+            <img src="../assets/img/Vector.png" width="70" height="70" alt="" />
+            <p class="johnmelo mt-2">Made by John Melo</p>
+          </div>
         </div>
       </div>
     </div>
@@ -131,5 +140,13 @@ export default {
 .btn:focus {
   outline: none;
   box-shadow: none;
+}
+.heightbig {
+  height: 38vh;
+}
+.johnmelo {
+  font-size: 12px;
+  color: rgb(167, 167, 167);
+  font-style: italic;
 }
 </style>

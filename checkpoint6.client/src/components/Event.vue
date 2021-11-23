@@ -15,9 +15,14 @@
             <p class="ps-2 m-0 cardlocaldate">
               {{ towerEvents.location }}
             </p>
-            <p class="ps-2 m-0 cardlocaldate">
-              {{ towerEvents.startDate }}
-            </p>
+            <div class="d-flex">
+              <p class="m-0 ps-2 cardlocaldate">Event Date:</p>
+              <p class="ps-2 m-0 cardlocaldate">
+                {{
+                  new Date(towerEvents.startDate).toISOString().substring(0, 10)
+                }}
+              </p>
+            </div>
             <div
               class="atcapacity mt-1 text-center"
               v-if="towerEvents.capacity === 0"

@@ -278,8 +278,15 @@
                     {{ activeEvent.location }}
                   </p>
                 </div>
-                <div>
-                  <p class="m-0 text-light pe-2">{{ activeEvent.startDate }}</p>
+                <div class="d-flex">
+                  <p class="m-0 text-light me-2">Event Date:</p>
+                  <p v-if="activeEvent.startDate" class="m-0 text-light pe-2">
+                    {{
+                      new Date(activeEvent.startDate)
+                        .toISOString()
+                        .substring(0, 10)
+                    }}
+                  </p>
                 </div>
               </div>
               <div class="d-flex">
@@ -306,7 +313,7 @@
                 <div v-if="user.isAuthenticated" class="me-3 mb-3">
                   <button
                     v-if="myActiveAttend"
-                    @click="notattend"
+                    @click="notattend(myActiveAttend.id)"
                     class="btn btnattending ps-3 elevation-3 border-0"
                   >
                     Attending! <i class="ms-2 mdi mdi-18px mdi-human pe-1"></i>
@@ -510,8 +517,15 @@
               <div>
                 <p class="localtitle m-0">{{ activeEvent.location }}</p>
               </div>
-              <div>
-                <p class="localtitle m-0">{{ activeEvent.startDate }}</p>
+              <div class="d-flex">
+                <p class="localtitle m-0 me-1">Event Date:</p>
+                <p v-if="activeEvent.startDate" class="localtitle m-0">
+                  {{
+                    new Date(activeEvent.startDate)
+                      .toISOString()
+                      .substring(0, 10)
+                  }}
+                </p>
               </div>
               <div class="mx-1">
                 <p class="desctitle mt-2 m-0">{{ activeEvent.description }}</p>
@@ -701,7 +715,7 @@ export default {
       comments: computed(() => AppState.comments),
       account: computed(() => AppState.account),
       user: computed(() => AppState.user),
-      myActiveAttend: computed(() => AppState.myActiveAttend),
+      myActiveAttend: computed(() => AppState.activeAttending.find(a => a.accountId == AppState.account.id)),
       async switchedit() {
         editevent.value = !editevent.value
       },
@@ -737,9 +751,9 @@ export default {
           Pop.toast(error.message, 'error')
         }
       },
-      async notattend() {
+      async notattend(id) {
         try {
-          await attendeesService.notattend(this.activeEvent.id)
+          await attendeesService.notattend(id)
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
