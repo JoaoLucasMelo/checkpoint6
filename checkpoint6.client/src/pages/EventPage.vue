@@ -23,7 +23,7 @@
               class="rounded picuser elevation-3"
               width="60"
               height="60"
-              :src="account.picture"
+              :src="account?.picture"
               alt=""
             />
           </div>
@@ -595,7 +595,7 @@
                 <div v-for="p in activeAttending" :key="p.id">
                   <img
                     class="picrounded"
-                    :src="p.account.picture"
+                    :src="p.account?.picture"
                     height="40"
                     width="40"
                     alt=""
