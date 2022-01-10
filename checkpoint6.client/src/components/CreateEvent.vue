@@ -124,12 +124,8 @@ import { watchEffect } from '@vue/runtime-core'
 import { useRoute, useRouter } from "vue-router"
 import { AppState } from "../AppState"
 export default {
-  props: {
-    activeEvent: {
-      type: Object
-    }
-  },
-  setup(props) {
+
+  setup() {
     const eventData = ref({})
     watchEffect(() => {
       eventData.value = {}

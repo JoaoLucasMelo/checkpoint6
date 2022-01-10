@@ -193,6 +193,7 @@ export default {
       async notattend(eventId, id) {
         try {
           await attendeesService.notattendaccount(eventId, id)
+          await eventsService.getCreatedEvents(AuthService.userInfo.id)
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')

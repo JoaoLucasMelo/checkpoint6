@@ -19,7 +19,7 @@ export default {
   name: 'App',
   setup() {
     return {
-      appState: computed(() => AppState),
+      AppState: computed(() => AppState),
       account: computed(() => AppState.account)
     }
   }

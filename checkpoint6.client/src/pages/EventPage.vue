@@ -599,7 +599,7 @@
                     height="40"
                     width="40"
                     alt=""
-                    :title="p.account.name"
+                    :title="p.account?.name"
                   />
                 </div>
               </div>
@@ -674,7 +674,7 @@ export default {
   props: {
     account: { type: Object, required: true }
   },
-  setup() {
+  setup(props) {
     const editevent = ref(false)
     const route = useRoute()
     const editable = ref({})
@@ -715,7 +715,7 @@ export default {
       comments: computed(() => AppState.comments),
       account: computed(() => AppState.account),
       user: computed(() => AppState.user),
-      myActiveAttend: computed(() => AppState.activeAttending.find(a => a.accountId == AppState.account.id)),
+      myActiveAttend: computed(() => AppState.activeAttending.find(a => a.accountId === props.account.id)),
       async switchedit() {
         editevent.value = !editevent.value
       },
