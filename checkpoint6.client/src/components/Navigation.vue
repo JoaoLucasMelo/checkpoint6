@@ -71,7 +71,9 @@
           </button>
         </div>
         <div>
-          <button class="btn buttonanim mt-3"><span>Home</span></button>
+          <router-link :to="{ name: 'Home' }">
+            <button class="btn buttonanim mt-3"><span>Home</span></button>
+          </router-link>
         </div>
       </div>
     </div>

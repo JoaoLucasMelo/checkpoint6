@@ -13,7 +13,8 @@ async getActiveAttendees(id){
   let active = AppState.activeAttending
   active = res.data
   AppState.activeAttending = active
-  await this.getMyAttending()
+  if(AppState.user.isAuthenticated){
+  await this.getMyAttending()}
   await this.findActiveAttending(id)
 }
 async getMyAttending(){
@@ -27,7 +28,7 @@ async attend(id){
   const res = await api.post('api/attendees', {eventId: id})
   logger.log('ATTENDING', res.data)
   let newattend = res.data
-  AppState.activeAttending = newattend
+  AppState.activeAttending.push(newattend)
   AppState.activeEvent = newattend.event
   eventsService.getActive(id)
   this.getActiveAttendees(id)
