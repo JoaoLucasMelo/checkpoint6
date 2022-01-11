@@ -1,7 +1,6 @@
 import { AppState } from "../AppState"
 import { logger } from "../utils/Logger"
 import { api } from "./AxiosService"
-import { commentsService } from "./CommentsService"
 import { eventsService } from "./EventsService"
 
 

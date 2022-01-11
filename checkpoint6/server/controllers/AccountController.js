@@ -1,5 +1,4 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
-import { nextTick } from '@vue/runtime-core'
 import { accountService } from '../services/AccountService'
 import { attendeesService } from '../services/AttendeesService'
 import BaseController from '../utils/BaseController'
